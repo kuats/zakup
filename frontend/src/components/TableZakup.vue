@@ -3,15 +3,15 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Department</th>
-          <th>GPZ</th>
-          <th>TruType</th>
-          <th>Purchase Name</th>
-          <th>Purchase Status</th>
-          <th>Price</th>
-          <th>Contract</th>
-          <th>Modified By</th>
-          <th>Modified Date</th>
+          <th>Отдел</th>
+          <th>ГПЗ</th>
+          <th>Тип Тру</th>
+          <th>Наименование закупки</th>
+          <th>Статус закупки</th>
+          <th>Цена</th>
+          <th>Договор</th>
+          <th>Изменено пользователем</th>
+          <th>Дата изменения</th>
         </tr>
       </thead>
       <tbody>
@@ -20,7 +20,15 @@
           <td>{{ item.gpz }}</td>
           <td>{{ item.truType }}</td>
           <td>{{ item.purchaseName }}</td>
-          <td>{{ item.purchaseStatus }}</td>
+          <td>
+            <select v-model="item.purchaseStatus" @change="updatePurchaseStatus(item)">
+              <option value="Разработка ТС">Разработка ТС</option>
+              <option value="Маркет-анализ">Маркет-анализ</option>
+              <option value="Инициирован закуп">Инициирован закуп</option>
+              <option value="На корректировке у инициатора">На корректировке у инициатора</option>
+              <option value="Заключен договор с поставщиком">Заключен договор с поставщиком</option>
+            </select>
+          </td>
           <td>{{ item.price }}</td>
           <td>{{ item.contract }}</td>
           <td>{{ item.modifiedBy }}</td>
@@ -43,7 +51,6 @@ export default {
   },
   methods: {
     fetchTableData() {
-      // Выполните GET-запрос к API для получения данных таблицы
       fetch('/api/table')
         .then((response) => response.json())
         .then((data) => {
@@ -59,13 +66,31 @@ export default {
         animation: `parallax 1.0s ease-out ${delay}s forwards`,
       };
     },
+    updatePurchaseStatus(item) {
+      fetch(`/api/table/${item._id}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          purchaseStatus: item.purchaseStatus,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Purchase status updated:', data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
   },
 };
 </script>
 
 <style>
 .table-container {
-  max-width: 800px;
+  max-width: 1600px; /* Обновите значение max-width, чтобы расширить таблицу */
   margin: 0 auto;
   border-radius: 10px;
   overflow: hidden;

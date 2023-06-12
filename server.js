@@ -190,6 +190,21 @@ app.get('/api/table/:id/download', (req, res) => {
     });
 });
 
+// API для обновления статуса закупки
+app.put('/api/table/:id/status', (req, res) => {
+  const { id } = req.params;
+  const { purchaseStatus } = req.body;
+
+  TableItem.findByIdAndUpdate(id, { purchaseStatus }, { new: true })
+    .then(item => {
+      res.json(item);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Internal server error' });
+    });
+});
+
 // Запуск сервера
 const port = 3000;
 app.listen(port, () => {

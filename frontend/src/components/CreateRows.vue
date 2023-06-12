@@ -1,9 +1,9 @@
 <template>
   <div class="container">
-    <h2>Create New Row</h2>
+    <h2>Создать новую строку</h2>
     <form @submit.prevent="createRow" class="form">
       <div class="form-group">
-        <label for="department">Department:</label>
+        <label for="department">Отдел:</label>
         <select id="department" v-model="newRow.department">
           <option value="ДЭ Астана">ДЭ Астана</option>
           <option value="ЦТПиС Шымкент">ЦТПиС Шымкент</option>
@@ -24,11 +24,11 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="purchaseName">Наименование ТРУ:</label>
+        <label for="purchaseName">Наименование закупки:</label>
         <input type="text" id="purchaseName" v-model="newRow.purchaseName" required>
       </div>
       <div class="form-group">
-        <label for="purchaseStatus">Статус:</label>
+        <label for="purchaseStatus">Статус закупки:</label>
         <select id="purchaseStatus" v-model="newRow.purchaseStatus">
           <option value="Разработка ТС">Разработка ТС</option>
           <option value="Маркет-анализ">Маркет-анализ</option>
@@ -41,7 +41,7 @@
         <label for="price">Цена:</label>
         <input type="number" id="price" v-model="newRow.price" required>
       </div>
-      <button type="submit" class="btn-create">Create</button>
+      <button type="submit" class="btn-create">Создать</button>
     </form>
   </div>
 </template>
@@ -67,16 +67,19 @@ export default {
       axios.post('/api/table', this.newRow)
         .then(response => {
           console.log(response.data);
-          this.newRow.department = '';
-          this.newRow.gpz = '';
-          this.newRow.truType = '';
-          this.newRow.purchaseName = '';
-          this.newRow.purchaseStatus = '';
-          this.newRow.price = 0;
+          this.clearForm();
         })
         .catch(error => {
           console.error(error);
         });
+    },
+    clearForm() {
+      this.newRow.department = '';
+      this.newRow.gpz = '';
+      this.newRow.truType = '';
+      this.newRow.purchaseName = '';
+      this.newRow.purchaseStatus = '';
+      this.newRow.price = 0;
     }
   }
 };
